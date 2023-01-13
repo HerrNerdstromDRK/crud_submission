@@ -20,11 +20,13 @@ import BlogPosts, { blogPostsLoader } from "./pages/BlogPosts/BlogPosts";
 import Faq from "./pages/help/Faq";
 import Contact, { contactAction } from "./pages/help/Contact";
 import BlogPost, { blogPostLoader } from "./pages/BlogPosts/BlogPost";
+import CreatePost, { createPostAction } from "./pages/BlogPosts/CreatePost";
 
 // Layouts
 import RootLayout from "./layouts/RootLayout";
 import HelpLayout from "./layouts/HelpLayout";
 import BlogPostsLayout from "./layouts/BlogPostsLayout";
+//import CreatePostLayout from "./layouts/CreatePostLayout";
 import BlogPostsError from "./pages/BlogPosts/BlogPostError";
 
 const router = createBrowserRouter(
@@ -46,6 +48,11 @@ const router = createBrowserRouter(
         <Route index element={<BlogPosts />} loader={blogPostsLoader} />
         <Route path=":id" element={<BlogPost />} loader={blogPostLoader} />
       </Route>
+      <Route
+        path="createpost"
+        element={<CreatePost />}
+        action={createPostAction}
+      />
       <Route path="*" element={<Home />} /> {/* catch-all path */}
     </Route>
   )
