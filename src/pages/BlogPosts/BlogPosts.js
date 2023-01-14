@@ -1,34 +1,81 @@
-import { useLoaderData, Link } from "react-router-dom";
+import React from "react";
+import { Await, useLoaderData, defer, Link } from "react-router-dom";
 
 import api from "../../api/posts";
 
 export default function BlogPosts() {
   // Retrieve the pre-loaded database data
   // This will invoke the below blogPostLoader as assigned in App.js
-  const blogPosts = useLoaderData();
+  const data = useLoaderData();
+  //  console.log("BlogPosts> data: " + JSON.stringify(data));
 
   return (
     <div className="blogposts">
-      {blogPosts.map((blogPosts) => (
-        <Link to={blogPosts.id.toString()} key={blogPosts.id}>
-          <p>Title: {blogPosts.title}</p>
-          <p>Author: {blogPosts.author}</p>
-          <p>Date Modified: {blogPosts.datemodified}</p>
-          <p>
-            {blogPosts.content.length > 199
-              ? blogPosts.content.substring(0, 198)
-              : blogPosts.content}
-          </p>
-        </Link>
-      ))}
+      <React.Suspense fallback={<p>Loading data...</p>}>
+        <Await
+          resolve={data.blogPosts}
+          errorElement={<p>Error loading blog posts!</p>}
+        >
+          {(blogPosts) =>
+            blogPosts.data.map((blogPosts) => (
+              <Link to={blogPosts.id.toString()} key={blogPosts.id}>
+                <p>Title: {blogPosts.title}</p>
+                <p>Author: {blogPosts.author}</p>
+                <p>Date Modified: {blogPosts.datemodified}</p>
+                <p>
+                  {blogPosts.content.length > 199
+                    ? blogPosts.content.substring(0, 198)
+                    : blogPosts.content}
+                </p>
+              </Link>
+            ))
+          }
+        </Await>
+      </React.Suspense>
     </div>
   );
 }
 
+/*            <div>
+              <p>blogPosts.data.length: {blogPosts.data.length}</p>
+              <p>
+                JSON.stringify(blogPosts.data.):{" "}
+                {JSON.stringify(blogPosts.data)}
+              </p>
+            </div>
+            
+          {blogPosts.map((blogPost) => (
+            <p>Title: {blogPost.title}</p>
+          ))}
+          
+          <div>
+            {" "}
+            <p>blogPosts.data.length: {blogPosts.data.length}</p>
+            <p>
+              JSON.stringify(blogPosts.data.): {JSON.stringify(blogPosts.data)}
+            </p>
+          </div>
+                    )}
+
+{data.blogPosts.map((blogPosts) => (
+  <Link to={blogPosts.id.toString()} key={blogPosts.id}>
+    <p>Title: {blogPosts.title}</p>
+    <p>Author: {blogPosts.author}</p>
+    <p>Date Modified: {blogPosts.datemodified}</p>
+    <p>
+      {blogPosts.content.length > 199
+        ? blogPosts.content.substring(0, 198)
+        : blogPosts.content}
+    </p>
+  </Link>
+))})}
+*/
+
 // Loader function
 export const blogPostsLoader = async () => {
   try {
-    const response = await api.get("/blogposts", {
+    // TODO: await
+    const responsePromise = api.get("/blogposts", {
       // query URL without using browser cache
       // For some reason, the app is not retrieving the full list of items
       // after a delete, despite the item just deleted no longer being resident
@@ -42,7 +89,8 @@ export const blogPostsLoader = async () => {
     });
     //    console.log(
     //      "blogPostsLoader> response.data: " + JSON.stringify(response.data) );
-    return response.data;
+    return defer({ blogPosts: responsePromise });
+    //response.data;
   } catch (err) {
     if (err.response) {
       // Not in the 200 response range

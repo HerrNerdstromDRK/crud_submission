@@ -1,4 +1,4 @@
-import { Form, redirect, useLoaderData } from "react-router-dom";
+import { Form, Link, redirect, useLoaderData } from "react-router-dom";
 
 import api from "../../api/posts";
 import "../../App.css";
@@ -16,11 +16,11 @@ export default function BlogPost() {
         <p>Content: {theBlogPost.content}</p>
       </div>
       <div>
+        <Link to={`/updatepost/${theBlogPost.id}`}>
+          <button>Update Post</button>
+        </Link>
         <Form method="delete">
           <button type="submit">Delete Post</button>
-        </Form>
-        <Form method="put">
-          <button type="submit">Update Post</button>
         </Form>
       </div>
     </div>
@@ -28,14 +28,14 @@ export default function BlogPost() {
 }
 
 export const blogPostButtonHandler = async ({ request, params }) => {
-  const data = await request.formData();
+  //  const data = await request.formData();
   const { id } = params;
 
   switch (request.method) {
-    case "PUT": {
+    /*  case "PUT": {
       //      console.log("blogPostButtonHandler> PUT id: " + id);
       return redirect("/updatepost/" + id);
-    }
+    }*/
     case "DELETE": {
       //console.log("blogPostButtonHandler> DELETE id: " + id);
       deleteBlogPost(id);
