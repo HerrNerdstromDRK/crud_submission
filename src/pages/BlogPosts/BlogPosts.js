@@ -18,10 +18,10 @@ export default function BlogPosts() {
         >
           {(blogPosts) =>
             blogPosts.data.map((blogPosts) => (
-              <Link to={blogPosts.id.toString()} key={blogPosts.id}>
+              <Link to={blogPosts._id.toString()} key={blogPosts._id}>
                 <p>Title: {blogPosts.title}</p>
                 <p>Author: {blogPosts.author}</p>
-                <p>Date Modified: {blogPosts.datemodified}</p>
+                <p>Date Modified: {blogPosts.modifieddate}</p>
                 <p>
                   {blogPosts.content.length > 199
                     ? blogPosts.content.substring(0, 198)
@@ -61,7 +61,7 @@ export default function BlogPosts() {
   <Link to={blogPosts.id.toString()} key={blogPosts.id}>
     <p>Title: {blogPosts.title}</p>
     <p>Author: {blogPosts.author}</p>
-    <p>Date Modified: {blogPosts.datemodified}</p>
+    <p>Date Modified: {blogPosts.modifieddate}</p>
     <p>
       {blogPosts.content.length > 199
         ? blogPosts.content.substring(0, 198)

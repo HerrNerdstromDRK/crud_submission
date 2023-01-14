@@ -10,7 +10,7 @@ export default function UpdatePost() {
   return (
     <div className="contact">
       <h3>Update Blog Post</h3>
-      <Form method="post" action={"/updatepost/" + data.id.toString()}>
+      <Form method="post" action={"/updatepost/" + data._id.toString()}>
         <label>
           <span>New title:</span>
           <input type="text" name="title" required defaultValue={data.title} />
@@ -48,7 +48,7 @@ export const updatePostLoader = async ({ params }) => {
     if (err.response.status === 404) {
       // Blog post not found.
       console.log("updatePostLoader> Found 404, throwing exception");
-      throw new Response("Blog ID not found", { status: 404 });
+      throw new Response("Blog post ID not found", { status: 404 });
     } else if (err.response) {
       // Not in the 200 response range
       console.log("updatePostLoader> Error status: " + err.response.status);
@@ -83,7 +83,7 @@ export const updatePostAction = async ({ request, params }) => {
   try {
     // Create the new form of the object, updating only those items that change
     const updatedPost = {
-      datemodified: new Date().toLocaleString(),
+      modifieddate: new Date().toLocaleString(),
       title: editTitle,
       content: editContent,
     };
@@ -101,7 +101,7 @@ export const updatePostAction = async ({ request, params }) => {
       console.log(err.response.headers);
     } else {
       // No response or non-200 error
-      console.log(`getNextID> Error: ${err.message}`);
+      console.log(`updatePostAction> Error: ${err.message}`);
     }
   }
 

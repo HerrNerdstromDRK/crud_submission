@@ -10,13 +10,13 @@ export default function BlogPost() {
     <div className="blogpost-details">
       <h2>Blog post details for {theBlogPost.title}</h2>
       <p>Author: {theBlogPost.author}</p>
-      <p>Date Modified: {theBlogPost.datemodified}</p>
+      <p>Date Modified: {theBlogPost.modifieddate}</p>
 
       <div className="details">
         <p>Content: {theBlogPost.content}</p>
       </div>
       <div>
-        <Link to={`/updatepost/${theBlogPost.id}`}>
+        <Link to={`/updatepost/${theBlogPost._id}`}>
           <button>Update Post</button>
         </Link>
         <Form method="delete">

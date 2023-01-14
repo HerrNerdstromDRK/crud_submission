@@ -39,9 +39,9 @@ export const createPostAction = async ({ request }) => {
     //    console.log(
     //      "blogPostsLengthLoader> response.data: " + JSON.stringify(response.data) );
     const blogPosts = getResponse.data;
-    const nextID = blogPosts.length
-      ? blogPosts[blogPosts.length - 1].id + 1
-      : 1;
+    //    const nextID = blogPosts.length
+    //      ? blogPosts[blogPosts.length - 1].id + 1
+    //      : 1;
     //    console.log(
     //      "createPostAction> blogPosts.length: " + blogPosts.length + ", nextID: " + nextID
     //    );
@@ -49,9 +49,9 @@ export const createPostAction = async ({ request }) => {
     // Build the new blog post
     const data = await request.formData();
     const newPost = {
-      id: nextID,
+      //    id: nextID,
       author: "Unknown author",
-      datemodified: new Date().toLocaleString(),
+      modifieddate: new Date().toLocaleString(),
       title: data.get("title"),
       content: data.get("content"),
     };
@@ -67,7 +67,7 @@ export const createPostAction = async ({ request }) => {
       console.log(err.response.headers);
     } else {
       // No response or non-200 error
-      console.log(`getNextID> Error: ${err.message}`);
+      console.log(`createPostAction> Error: ${err.message}`);
     }
   }
 
