@@ -6,7 +6,7 @@ export default function BlogPostError() {
   return (
     <div className="blogpost-error">
       <h2>Error</h2>
-      <p>{error.message}</p>
+      <p>{error.data}</p>
       <Link to="/">Back to homepage</Link>
     </div>
   );

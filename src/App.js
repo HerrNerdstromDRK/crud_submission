@@ -4,9 +4,6 @@ import "./App.css";
 // useState is used by React to update the DOM and interface based on changes
 // useRef allow us to capture data from user input via the web interface
 // useEffect is a hook that allows us to store data persistently
-//import React, { useState, useRef, useEffect } from "react";
-//import TodoList from "./TodoList";
-//import { v4 as uuidv4 } from "uuid";
 import {
   createBrowserRouter,
   Route,
@@ -19,8 +16,15 @@ import About from "./pages/About";
 import BlogPosts, { blogPostsLoader } from "./pages/BlogPosts/BlogPosts";
 import Faq from "./pages/help/Faq";
 import Contact, { contactAction } from "./pages/help/Contact";
-import BlogPost, { blogPostLoader } from "./pages/BlogPosts/BlogPost";
+import BlogPost, {
+  blogPostLoader,
+  blogPostButtonHandler,
+} from "./pages/BlogPosts/BlogPost";
 import CreatePost, { createPostAction } from "./pages/BlogPosts/CreatePost";
+import UpdatePost, {
+  updatePostAction,
+  updatePostLoader,
+} from "./pages/BlogPosts/UpdatePost";
 
 // Layouts
 import RootLayout from "./layouts/RootLayout";
@@ -46,8 +50,19 @@ const router = createBrowserRouter(
       >
         {/* A loader runs the function assigned each time we visit the page */}
         <Route index element={<BlogPosts />} loader={blogPostsLoader} />
-        <Route path=":id" element={<BlogPost />} loader={blogPostLoader} />
+        <Route
+          path=":id"
+          element={<BlogPost />}
+          loader={blogPostLoader}
+          action={blogPostButtonHandler}
+        />
       </Route>
+      <Route
+        path="updatepost/:id"
+        element={<UpdatePost />}
+        loader={updatePostLoader}
+        action={updatePostAction}
+      />
       <Route
         path="createpost"
         element={<CreatePost />}

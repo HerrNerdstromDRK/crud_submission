@@ -2,46 +2,23 @@ import { useLoaderData, Link } from "react-router-dom";
 
 import api from "../../api/posts";
 
-/*
-const fetchPosts = async () => {
-  console.log("fetchPosts()");
-  try {
-    const response = await api.get("/blogposts");
-    const blogPosts = response.data;
-    console.log("BlogPosts> blogPosts: " + blogPosts);
-
-    return blogPosts;
-  } catch (err) {
-    console.log("fetchPosts> err: " + err.toString());
-  }
-};
-
-export default function BlogPosts() {
-  console.log("BlogPosts");
-  const blogPosts = fetchPosts();
-  return (
-    <div className="blogposts">
-      {blogPosts.map((blogPosts) => (
-        <Link to={blogPosts.id.toString()} key={blogPosts.id}>
-          <p>Title: {blogPosts.title}</p>
-          <p>Location: {blogPosts.location}</p>
-        </Link>
-      ))}
-    </div>
-  );
-}
-*/
-
 export default function BlogPosts() {
   // Retrieve the pre-loaded database data
   // This will invoke the below blogPostLoader as assigned in App.js
-  const blogPosts = Array.from(useLoaderData());
+  const blogPosts = useLoaderData();
+
   return (
     <div className="blogposts">
       {blogPosts.map((blogPosts) => (
         <Link to={blogPosts.id.toString()} key={blogPosts.id}>
           <p>Title: {blogPosts.title}</p>
-          <p>Location: {blogPosts.location}</p>
+          <p>Author: {blogPosts.author}</p>
+          <p>Date Modified: {blogPosts.datemodified}</p>
+          <p>
+            {blogPosts.content.length > 199
+              ? blogPosts.content.substring(0, 198)
+              : blogPosts.content}
+          </p>
         </Link>
       ))}
     </div>
@@ -51,7 +28,18 @@ export default function BlogPosts() {
 // Loader function
 export const blogPostsLoader = async () => {
   try {
-    const response = await api.get("/blogposts");
+    const response = await api.get("/blogposts", {
+      // query URL without using browser cache
+      // For some reason, the app is not retrieving the full list of items
+      // after a delete, despite the item just deleted no longer being resident
+      // in the backend database
+      params: { timestamp: Date.now() },
+      headers: {
+        "Cache-Control": "no-cache",
+        Pragma: "no-cache",
+        Expires: "0",
+      },
+    });
     //    console.log(
     //      "blogPostsLoader> response.data: " + JSON.stringify(response.data) );
     return response.data;
@@ -66,11 +54,4 @@ export const blogPostsLoader = async () => {
       console.log(`blogPostsLoader> Error: ${err.message}`);
     }
   }
-  /*  const res = await fetch("http://localhost:4000/blogposts");
-  if (!res.ok) {
-    throw Error("Could not fetch the blog posts");
-  }
-
-  return res.json();
-  */
 };
