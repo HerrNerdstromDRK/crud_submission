@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Form, redirect, useActionData } from "react-router-dom";
-import api from "../../api/posts";
+import api from "../../api/axios";
 
 export default function CreatePost() {
   // The useActionData() hook allows us access to the return data

@@ -26,6 +26,7 @@ import UpdatePost, {
   updatePostLoader,
 } from "./pages/BlogPosts/UpdatePost";
 import Register from "./pages/Register";
+import Login from "./pages/Login";
 
 // Layouts
 import RootLayout from "./layouts/RootLayout";
@@ -44,6 +45,7 @@ const router = createBrowserRouter(
         <Route path="contact" element={<Contact />} action={contactAction} />
       </Route>
       <Route path="register" element={<Register />} />
+      <Route path="login" element={<Login />} />
       <Route
         path="blogposts"
         element={<BlogPostsLayout />}

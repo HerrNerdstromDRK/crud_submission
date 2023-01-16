@@ -1,6 +1,6 @@
 import React from "react";
 import { Form, redirect, useLoaderData } from "react-router-dom";
-import api from "../../api/posts";
+import api from "../../api/axios";
 
 export default function UpdatePost() {
   // The useActionData() hook allows us access to the return data

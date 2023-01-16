@@ -1,18 +1,19 @@
 import { useRef, useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import {
   faCheck,
   faTimes,
   faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import api from "../api/posts";
+import api from "../api/axios";
 import "../App.css";
 
 const FIRSTNAME_REGEX = /^[a-zA-Z]{1,100}$/;
 const LASTNAME_REGEX = /^[a-zA-Z]{1,100}$/;
 const USERNAME_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
-const REGISTER_URL = "/blogusers";
+const REGISTER_URL = "/blogusers/register";
 
 const Register = () => {
   // Place focus on first/last name input when page loads
@@ -138,7 +139,7 @@ const Register = () => {
     try {
       const response = await api.post(
         REGISTER_URL,
-        JSON.stringify({ firstName, lastName, userName, hashedPassword: pwd }),
+        JSON.stringify({ firstName, lastName, userName, pwd }),
         {
           headers: {
             "Content-Type": "application/json",
@@ -175,9 +176,7 @@ const Register = () => {
         <section>
           <h1>Success!</h1>
           <p>
-            TODO: Send to home
-            <br />
-            <a href="#">Sign In</a>
+            <Link to="/login">Sign In</Link>
           </p>
         </section>
       ) : (
@@ -378,10 +377,7 @@ const Register = () => {
           <p></p>
           Already registered?
           <br />
-          <span className="line">
-            {/* TODO Put router link here */}
-            <a href="#">Sign In</a>
-          </span>
+          <Link to="/login">Sign In</Link>
         </section>
       )}
     </>

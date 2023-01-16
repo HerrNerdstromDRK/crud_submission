@@ -1,7 +1,7 @@
 import React from "react";
 import { Await, useLoaderData, defer, Link } from "react-router-dom";
 
-import api from "../../api/posts";
+import api from "../../api/axios";
 
 export default function BlogPosts() {
   // Retrieve the pre-loaded database data

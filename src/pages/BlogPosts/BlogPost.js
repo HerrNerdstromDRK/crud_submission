@@ -1,6 +1,6 @@
 import { Form, Link, redirect, useLoaderData } from "react-router-dom";
 
-import api from "../../api/posts";
+import api from "../../api/axios";
 import "../../App.css";
 
 export default function BlogPost() {
