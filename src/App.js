@@ -25,6 +25,7 @@ import UpdatePost, {
   updatePostAction,
   updatePostLoader,
 } from "./pages/BlogPosts/UpdatePost";
+import Register from "./pages/Register";
 
 // Layouts
 import RootLayout from "./layouts/RootLayout";
@@ -42,7 +43,7 @@ const router = createBrowserRouter(
         <Route path="faq" element={<Faq />} />
         <Route path="contact" element={<Contact />} action={contactAction} />
       </Route>
-      {/* Used to pre-load data */}
+      <Route path="register" element={<Register />} />
       <Route
         path="blogposts"
         element={<BlogPostsLayout />}
