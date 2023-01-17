@@ -7,6 +7,7 @@ export default function UpdatePost() {
   // from the updatePostAction() below.
   // We can use it to inform any form updates/responses here.
   const data = useLoaderData();
+  console.log("UpdatePost> data: " + JSON.stringify(data));
   return (
     <div className="contact">
       <h3>Update Blog Post</h3>
@@ -36,11 +37,12 @@ export default function UpdatePost() {
 export const updatePostLoader = async ({ params }) => {
   // Destructure id from the parameters
   const { id } = params;
+  console.log("updatePostLoader> id: " + id);
   try {
     const response = await api.get("/blogposts/" + id);
-    //    console.log(
-    //      "updatePostLoader> response.data: " + JSON.stringify(response.data)
-    //    );
+    console.log(
+      "updatePostLoader> response.data: " + JSON.stringify(response.data)
+    );
     return response.data;
   } catch (err) {
     console.log("updatePostLoader> data: " + JSON.stringify(err.response.data));
@@ -67,18 +69,19 @@ export const updatePostLoader = async ({ params }) => {
 export const updatePostAction = async ({ request, params }) => {
   const data = await request.formData();
   const { id } = params;
-  //  console.log("updatePostaction> params: " + JSON.stringify(params));
+  console.log(
+    "updatePostAction> params: " + JSON.stringify(params) + ", id: " + id
+  );
   const editTitle = data.get("title");
   const editContent = data.get("content");
-  /*  console.log(
-    "updatePostaction> id: " +
+  console.log(
+    "updatePostAction> id: " +
       id +
       ", editTitle: " +
       editTitle +
       ", editContent: " +
       editContent
   );
-*/
 
   try {
     // Create the new form of the object, updating only those items that change
@@ -87,9 +90,9 @@ export const updatePostAction = async ({ request, params }) => {
       title: editTitle,
       content: editContent,
     };
-    //    console.log(
-    //      "updatePostLoader> updatedPost: " + JSON.stringify(updatedPost)
-    //    );
+    console.log(
+      "updatePostAction> updatedPost: " + JSON.stringify(updatedPost)
+    );
 
     // Next, submit the new post
     await api.patch(`/blogposts/${id}`, updatedPost);
@@ -106,5 +109,5 @@ export const updatePostAction = async ({ request, params }) => {
   }
 
   // redirect the user
-  return redirect("/blogposts");
+  return redirect("/");
 };

@@ -1,37 +1,45 @@
 import React from "react";
-import { Await, useLoaderData, defer, Link } from "react-router-dom";
+import { useLoaderData, useNavigation, Link } from "react-router-dom";
 
 import api from "../../api/axios";
 
-export default function BlogPosts() {
-  // Retrieve the pre-loaded database data
-  // This will invoke the below blogPostLoader as assigned in App.js
-  const data = useLoaderData();
-  //  console.log("BlogPosts> data: " + JSON.stringify(data));
-
-  return (
-    <div className="blogposts">
+/*
       <React.Suspense fallback={<p>Loading data...</p>}>
         <Await
           resolve={data.blogPosts}
           errorElement={<p>Error loading blog posts!</p>}
         >
-          {(blogPosts) =>
-            blogPosts.data.map((blogPosts) => (
-              <Link to={blogPosts._id.toString()} key={blogPosts._id}>
-                <p>Title: {blogPosts.title}</p>
-                <p>Author: {blogPosts.author}</p>
-                <p>Date Modified: {blogPosts.modifieddate}</p>
-                <p>
-                  {blogPosts.content.length > 199
-                    ? blogPosts.content.substring(0, 198)
-                    : blogPosts.content}
-                </p>
-              </Link>
-            ))
-          }
-        </Await>
+                </Await>
       </React.Suspense>
+*/
+
+export default function BlogPosts() {
+  // Retrieve the pre-loaded database data
+  // This will invoke the below blogPostLoader as assigned in App.js
+  const blogPosts = useLoaderData();
+  const navigation = useNavigation();
+
+  //  console.log("BlogPosts> blogPosts: " + JSON.stringify(blogPosts));
+  // The proper method to handle slow loader functions is with Response/Await
+  // I was able to get it working, but it became noisy when there were no
+  // delays. Go figure.
+  if (navigation.state === "Loading") {
+    return <h1> Loading... </h1>;
+  }
+  return (
+    <div className="blogposts">
+      {blogPosts.map((blogPosts) => (
+        <Link to={blogPosts._id.toString()} key={blogPosts._id}>
+          <p>Title: {blogPosts.title}</p>
+          <p>Author: {blogPosts.author}</p>
+          <p>Date Modified: {blogPosts.modifieddate}</p>
+          <p>
+            {blogPosts.content.length > 199
+              ? blogPosts.content.substring(0, 198)
+              : blogPosts.content}
+          </p>
+        </Link>
+      ))}
     </div>
   );
 }
@@ -73,9 +81,10 @@ export default function BlogPosts() {
 
 // Loader function
 export const blogPostsLoader = async () => {
+  //  console.log("blogPostsLoader> Loading blog posts");
   try {
     // TODO: await
-    const responsePromise = api.get("/blogposts", {
+    const response = await api.get("/blogposts", {
       // query URL without using browser cache
       // For some reason, the app is not retrieving the full list of items
       // after a delete, despite the item just deleted no longer being resident
@@ -88,9 +97,10 @@ export const blogPostsLoader = async () => {
       },
     });
     //    console.log(
-    //      "blogPostsLoader> response.data: " + JSON.stringify(response.data) );
-    return defer({ blogPosts: responsePromise });
-    //response.data;
+    //      "blogPostsLoader> response.data: " + JSON.stringify(response.data)
+    //    );
+    //    return defer({ blogPosts: responsePromise });
+    return response.data;
   } catch (err) {
     if (err.response) {
       // Not in the 200 response range
