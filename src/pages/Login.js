@@ -4,7 +4,7 @@ import { Link, useNavigate, Navigate } from "react-router-dom";
 import api from "../api/axios";
 import useAuth from "../hooks/useAuth";
 
-const LOGIN_URL = "/blogusers/authenticate";
+const LOGIN_URL = "/inventoryitemusers/authenticate";
 
 const Login = () => {
   // Capture the stateful auth context
@@ -62,7 +62,7 @@ const Login = () => {
 
       // Send the user to its original destination if routed here via protected route
       //      navigate(from, { replace: true });
-      navigate("/blogposts/" + auth.userName);
+      navigate("/inventoryitems/" + auth.userName);
     } catch (err) {
       if (!err?.response) {
         setErrMsg("No server response");
@@ -73,7 +73,7 @@ const Login = () => {
   };
 
   if (auth?.userName) {
-    return <Navigate replace to={"/blogposts/" + auth.userName} />;
+    return <Navigate replace to={"/inventoryitems/" + auth.userName} />;
   }
 
   return (

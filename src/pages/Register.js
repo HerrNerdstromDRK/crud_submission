@@ -13,7 +13,7 @@ const FIRSTNAME_REGEX = /^[a-zA-Z]{1,100}$/;
 const LASTNAME_REGEX = /^[a-zA-Z]{1,100}$/;
 const USERNAME_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
-const REGISTER_URL = "/blogusers/register";
+const REGISTER_URL = "/inventoryitemusers/register";
 
 const Register = () => {
   // Place focus on first/last name input when page loads

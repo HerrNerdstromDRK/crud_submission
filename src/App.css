@@ -102,8 +102,8 @@ form label span {
   margin-bottom: 10px;
 }
 
-/* blogposts list */
-.blogposts > a {
+/* inventoryitems list */
+.inventoryitems > a {
   display: block;
   background: rgba(0,0,0,0.2);
   padding: 20px;
@@ -111,19 +111,19 @@ form label span {
   margin: 20px 0;
   text-decoration: none;
 }
-.blogposts > a:hover p {
+.inventoryitems > a:hover p {
   color: var(--primary);
 }
-.blogposts p {
+.inventoryitems p {
   margin: 0;
 }
-.blogposts > a p:last-child {
+.inventoryitems > a p:last-child {
  font-size: 0.8em;
  color: #bbb;
 }
 
-/* blogposts details */
-.blogpost-details {
+/* inventoryitems details */
+.inventoryitem-details {
   background: rgba(0,0,0,0.2);
   padding: 20px;
   border-radius: 4px;

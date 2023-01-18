@@ -1,17 +1,24 @@
 import api from "../api/axios";
 
-const API_BASE_URL = "/blogposts";
+// TODO: dotenv
+const API_BASE_URL = "/inventoryitems/byusername/"; // :userName
 
 /**
- * Load all blog posts.
- * @param {none} param0
+ * Load all inventory items for a given user.
+ * @param {userName} param0
  * @returns
  */
-export const blogPostsLoader = async () => {
-  //  console.log("blogPostsLoader> Loading all blog posts");
+export const inventoryItemsByUserNameLoader = async ({ params }) => {
+  const userName = params.userName;
+  console.log(
+    "inventoryItemsByUserNameLoader> Loading inventory items for userName: " +
+      userName
+  );
 
   try {
-    const response = await api.get(API_BASE_URL, {
+    const fullURL = API_BASE_URL + userName;
+    console.log("inventoryItemsByUserNameLoader> fullURL: " + fullURL);
+    const response = await api.get(fullURL, {
       // query URL without using browser cache
       // For some reason, the app is not retrieving the full list of items
       // after a delete, despite the item just deleted no longer being resident
@@ -24,9 +31,8 @@ export const blogPostsLoader = async () => {
       },
     });
     //    console.log(
-    //      "blogPostsLoader> response.data: " + JSON.stringify(response.data)
+    //      "inventoryItemsByUserNameLoader> response.data: " + JSON.stringify(response.data)
     //    );
-    //    return defer({ blogPosts: responsePromise });
     return response.data;
   } catch (err) {
     if (err.response) {
@@ -36,7 +42,7 @@ export const blogPostsLoader = async () => {
       console.log(err.response.headers);
     } else {
       // No response or non-200 error
-      console.log(`blogPostsLoader> Error: ${err.message}`);
+      console.log(`inventoryItemsByUserNameLoader> Error: ${err.message}`);
     }
   }
 };

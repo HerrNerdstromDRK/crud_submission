@@ -2,20 +2,9 @@ import { NavLink, Outlet } from "react-router-dom";
 import BreadCrumbs from "../components/BreadCrumbs";
 import useAuth from "../hooks/useAuth";
 
-/*
-          <NavLink to="about">About</NavLink>
-          <NavLink to="help">Help</NavLink>
-          <NavLink to="blogposts">BlogPosts</NavLink>
-          */
-
 export default function RootLayout() {
   const { auth } = useAuth();
-  /*  if (auth?.userName) {
-    console.log("RootLayout> User logged in");
-  } else {
-    console.log("RootLayout> No user logged in");
-  }
-*/
+
   return (
     <div className="root-layout">
       <header>
@@ -26,7 +15,7 @@ export default function RootLayout() {
             <>
               {" "}
               <NavLink to="logout">Logout</NavLink>
-              <NavLink to="createpost">Create Post</NavLink>
+              <NavLink to="createinventoryitem">Create Item</NavLink>
             </>
           ) : (
             <>

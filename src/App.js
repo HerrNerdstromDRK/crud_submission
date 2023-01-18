@@ -10,21 +10,23 @@ import {
   RouterProvider,
 } from "react-router-dom";
 
-import BlogPosts from "./pages/BlogPosts/BlogPosts";
-import BlogPost, {
-  blogPostButtonHandler,
-  blogPostLoader,
-} from "./pages/BlogPosts/BlogPost";
-import { blogPostsLoader } from "./loaders/blogPostsLoader";
-import { blogPostsByUserNameLoader } from "./loaders/blogPostsByUserNameLoader";
-import CreatePost, { createPostAction } from "./pages/BlogPosts/CreatePost";
+import InventoryItems from "./pages/InventoryItems";
+import InventoryItem, {
+  inventoryItemButtonHandler,
+  inventoryItemLoader,
+} from "./pages/InventoryItem";
+import { inventoryItemsLoader } from "./loaders/inventoryItemsLoader";
+import { inventoryItemsByUserNameLoader } from "./loaders/inventoryItemsByUserNameLoader";
+import CreateInventoryItem, {
+  createInventoryItemAction,
+} from "./pages/CreateInventoryItem";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
-import Logout from "./pages/BlogPosts/Logout";
+import Logout from "./pages/Logout";
 
 // Layouts
 import RootLayout from "./layouts/RootLayout";
-import BlogPostsError from "./pages/BlogPosts/BlogPostError";
+import InventoryItemsError from "./pages/InventoryItemError";
 import RequireAuth from "./components/RequireAuth";
 import useAuth from "./hooks/useAuth";
 
@@ -34,24 +36,28 @@ function App() {
     createRoutesFromElements(
       <Route path="/" element={<RootLayout />}>
         {/* Route to retrieve items from all users */}
-        <Route index element={<BlogPosts />} loader={blogPostsLoader} />
         <Route
-          path="/blogposts"
-          element={<BlogPosts />}
-          loader={blogPostsLoader}
+          index
+          element={<InventoryItems />}
+          loader={inventoryItemsLoader}
         />
         <Route
-          path="/blogposts/:userName"
-          element={<BlogPosts />}
-          loader={blogPostsByUserNameLoader}
-          errorElement={<BlogPostsError />}
+          path="/inventoryitems"
+          element={<InventoryItems />}
+          loader={inventoryItemsLoader}
         />
         <Route
-          path="/blogpost/:id"
-          element={<BlogPost />}
-          loader={blogPostLoader}
-          action={blogPostButtonHandler}
-          errorElement={<BlogPostsError />}
+          path="/inventoryitems/:userName"
+          element={<InventoryItems />}
+          loader={inventoryItemsByUserNameLoader}
+          errorElement={<InventoryItemsError />}
+        />
+        <Route
+          path="/inventoryitem/:id"
+          element={<InventoryItem />}
+          loader={inventoryItemLoader}
+          action={inventoryItemButtonHandler}
+          errorElement={<InventoryItemsError />}
         />
         <Route path="register" element={<Register />} />
         <Route path="login" element={<Login />} />
@@ -59,14 +65,18 @@ function App() {
         {/* Protected routes */}
         <Route element={<RequireAuth />}>
           <Route
-            path="createpost"
-            element={<CreatePost />}
-            action={createPostAction({ auth })}
+            path="createinventoryitem"
+            element={<CreateInventoryItem />}
+            action={createInventoryItemAction({ auth })}
           />
           {/* Protected route for items for this user only */}
         </Route>
         {/* Catch all */}
-        <Route path="*" element={<BlogPosts />} loader={blogPostsLoader} />{" "}
+        <Route
+          path="*"
+          element={<InventoryItems />}
+          loader={inventoryItemsLoader}
+        />{" "}
       </Route>
     )
   );
