@@ -1,6 +1,6 @@
 import React from "react";
 import { useRef, useState, useEffect } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate, Navigate } from "react-router-dom";
 import api from "../api/axios";
 import useAuth from "../hooks/useAuth";
 
@@ -8,11 +8,11 @@ const LOGIN_URL = "/blogusers/authenticate";
 
 const Login = () => {
   // Capture the stateful auth context
-  const { setAuth } = useAuth();
+  const { auth, setAuth } = useAuth();
 
   const navigate = useNavigate();
-  const location = useLocation();
-  const from = location.state?.from?.pathname || "/";
+  //const location = useLocation();
+  //  const from = location.state?.from?.pathname || "/";
 
   // Keep two references: one for userName and the other for the err message
   const userNameRef = useRef();
@@ -34,7 +34,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Login.handleSubmit> userName: " + userName + ", pwd: " + pwd);
+    //    console.log("Login.handleSubmit> userName: " + userName + ", pwd: " + pwd);
 
     try {
       const response = await api.post(
@@ -46,12 +46,12 @@ const Login = () => {
         }
       );
       // Post condition: login successful (errors handled through catch below)
-      console.log(
-        "Login.handleSubmit> response: " + JSON.stringify(response.data)
-      );
+      //      console.log(
+      //        "Login.handleSubmit> response: " + JSON.stringify(response.data)
+      //      );
 
       const accessToken = response?.data?.accessToken;
-      console.log("Login.handleSubmit> accessToken: " + accessToken);
+      //      console.log("Login.handleSubmit> accessToken: " + accessToken);
 
       // Save the login information in the global auth context
       setAuth({ userName, pwd, accessToken });
@@ -61,7 +61,8 @@ const Login = () => {
       setPwd("");
 
       // Send the user to its original destination if routed here via protected route
-      navigate(from, { replace: true });
+      //      navigate(from, { replace: true });
+      navigate("/");
     } catch (err) {
       if (!err?.response) {
         setErrMsg("No server response");
@@ -70,6 +71,10 @@ const Login = () => {
       }
     }
   };
+
+  if (auth?.userName) {
+    return <Navigate replace to="/" />;
+  }
 
   return (
     <section>

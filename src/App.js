@@ -12,10 +12,10 @@ import {
 } from "react-router-dom";
 
 import Home from "./pages/Home";
-import About from "./pages/About";
+//import About from "./pages/About";
 import BlogPosts, { blogPostsLoader } from "./pages/BlogPosts/BlogPosts";
-import Faq from "./pages/help/Faq";
-import Contact, { contactAction } from "./pages/help/Contact";
+//import Faq from "./pages/help/Faq";
+//import Contact, { contactAction } from "./pages/help/Contact";
 import BlogPost, {
   blogPostLoader,
   blogPostButtonHandler,
@@ -31,10 +31,10 @@ import Logout from "./pages/BlogPosts/Logout";
 
 // Layouts
 import RootLayout from "./layouts/RootLayout";
-import HelpLayout from "./layouts/HelpLayout";
-import BlogPostsLayout from "./layouts/BlogPostsLayout";
+//import HelpLayout from "./layouts/HelpLayout";
+//import BlogPostsLayout from "./layouts/BlogPostsLayout";
 //import CreatePostLayout from "./layouts/CreatePostLayout";
-import BlogPostsError from "./pages/BlogPosts/BlogPostError";
+//import BlogPostsError from "./pages/BlogPosts/BlogPostError";
 import RequireAuth from "./components/RequireAuth";
 import useAuth from "./hooks/useAuth";
 
@@ -59,7 +59,12 @@ function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<RootLayout />}>
-        <Route index element={<BlogPosts />} loader={blogPostsLoader} />
+        {/* Route to retrieve items from all users */}
+        <Route
+          index
+          element={<BlogPosts />}
+          loader={blogPostsLoader({ userName: "*" })}
+        />
         <Route
           path=":id"
           element={<BlogPost />}
@@ -81,6 +86,12 @@ function App() {
             path="createpost"
             element={<CreatePost />}
             action={createPostAction({ auth })}
+          />
+          {/* Protected route for items for this user only */}
+          <Route
+            path="itemsbyuser"
+            element={<BlogPosts />}
+            loader={blogPostsLoader({ userName: "test4" })}
           />
         </Route>
         {/* Catch all */}

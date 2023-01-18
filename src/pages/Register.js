@@ -147,7 +147,7 @@ const Register = () => {
           },
         }
       );
-      console.log("Register> api response: " + JSON.stringify(response));
+      //      console.log("Register> api response: " + JSON.stringify(response));
 
       // Set the success property so the below component draws correctly
       setSuccess(true);

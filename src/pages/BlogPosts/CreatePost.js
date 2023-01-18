@@ -1,11 +1,6 @@
 import React from "react";
 
-import {
-  Form,
-  useActionData,
-  redirect,
-  useOutletContext,
-} from "react-router-dom";
+import { Form, useActionData, redirect } from "react-router-dom";
 import api from "../../api/axios";
 import useAuth from "../../hooks/useAuth";
 
@@ -27,13 +22,6 @@ export default function CreatePost() {
           <span>Your post:</span>
           <textarea type="message" name="content" required></textarea>
         </label>
-        <input
-          type="message"
-          name="userName"
-          value={auth.userName}
-          disabled
-          hidden
-        />
         <button>Create Post</button>
         {/* Check if the data from the createPostAction() below returned an error
           If so, show the user. */}
@@ -54,19 +42,6 @@ export const createPostAction =
     // Pre-condition: User is logged in
     //  console.log(request);
     try {
-      // First, get a new ID
-      // TOOD: This is grossly inefficient and not in the spirit of javascript/react dev
-      //    const getResponse = await api.get("/blogposts");
-      //    console.log(
-      //      "blogPostsLengthLoader> response.data: " + JSON.stringify(response.data) );
-      //const blogPosts = getResponse.data;
-      //    const nextID = blogPosts.length
-      //      ? blogPosts[blogPosts.length - 1].id + 1
-      //      : 1;
-      //    console.log(
-      //      "createPostAction> blogPosts.length: " + blogPosts.length + ", nextID: " + nextID
-      //    );
-
       // Build the new blog post
       const data = await request.formData();
       //      console.log("createPostAction> data: ");
@@ -97,5 +72,5 @@ export const createPostAction =
     }
 
     // redirect the user
-    return redirect("/blogposts");
+    return redirect("/");
   };
