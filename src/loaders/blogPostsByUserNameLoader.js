@@ -9,36 +9,13 @@ const API_BASE_URL = "/blogposts/byusername/"; // :userName
  */
 export const blogPostsByUserNameLoader = async ({ params }) => {
   const userName = params.userName;
-  console.log(
-    "blogPostsByUserNameLoader> Loading blog posts for userName: " + userName
-  );
-  /*
-      const response = await api.post(
-        LOGIN_URL,
-        JSON.stringify({ userName, pwd }),
-        {
-          headers: { "Content-Type": "application/json" },
-          //          withCredentials: true,
-        }
-      );
-      
-            const response = await api.get("/blogposts", {
-        // query URL without using browser cache
-        // For some reason, the app is not retrieving the full list of items
-        // after a delete, despite the item just deleted no longer being resident
-        // in the backend database
-        params: { timestamp: Date.now() },
-        headers: {
-          "Cache-Control": "no-cache",
-          Pragma: "no-cache",
-          Expires: "0",
-        },
-      });
+  //  console.log(
+  //    "blogPostsByUserNameLoader> Loading blog posts for userName: " + userName
+  //  );
 
-      */
   try {
     const fullURL = API_BASE_URL + userName;
-    console.log("getBlogPostsByUserName> fulLURL: " + fullURL);
+    //    console.log("blogPostsByUserNameLoader> fullURL: " + fullURL);
     const response = await api.get(fullURL, {
       // query URL without using browser cache
       // For some reason, the app is not retrieving the full list of items
@@ -55,7 +32,6 @@ export const blogPostsByUserNameLoader = async ({ params }) => {
     //    console.log(
     //      "blogPostsByUserNameLoader> response.data: " + JSON.stringify(response.data)
     //    );
-    //    return defer({ blogPosts: responsePromise });
     return response.data;
   } catch (err) {
     if (err.response) {
