@@ -13,13 +13,15 @@ import {
 
 import Home from "./pages/Home";
 //import About from "./pages/About";
-import BlogPosts, { blogPostsLoader } from "./pages/BlogPosts/BlogPosts";
+import BlogPosts from "./pages/BlogPosts/BlogPosts";
 //import Faq from "./pages/help/Faq";
 //import Contact, { contactAction } from "./pages/help/Contact";
 import BlogPost, {
-  blogPostLoader,
   blogPostButtonHandler,
+  blogPostLoader,
 } from "./pages/BlogPosts/BlogPost";
+import { blogPostsLoader } from "./loaders/blogPostsLoader";
+import { blogPostsByUserNameLoader } from "./loaders/blogPostsByUserNameLoader";
 import CreatePost, { createPostAction } from "./pages/BlogPosts/CreatePost";
 import UpdatePost, {
   updatePostAction,
@@ -60,13 +62,19 @@ function App() {
     createRoutesFromElements(
       <Route path="/" element={<RootLayout />}>
         {/* Route to retrieve items from all users */}
+        <Route index element={<BlogPosts />} loader={blogPostsLoader} />
         <Route
-          index
+          path="/blogposts"
           element={<BlogPosts />}
-          loader={blogPostsLoader({ userName: "*" })}
+          loader={blogPostsLoader}
         />
         <Route
-          path=":id"
+          path="/blogposts/:userName"
+          element={<BlogPosts />}
+          loader={blogPostsByUserNameLoader}
+        />
+        <Route
+          path="/blogpost/:id"
           element={<BlogPost />}
           loader={blogPostLoader}
           action={blogPostButtonHandler}
@@ -88,11 +96,6 @@ function App() {
             action={createPostAction({ auth })}
           />
           {/* Protected route for items for this user only */}
-          <Route
-            path="itemsbyuser"
-            element={<BlogPosts />}
-            loader={blogPostsLoader({ userName: "test4" })}
-          />
         </Route>
         {/* Catch all */}
         <Route path="*" element={<Home />} /> {/* catch-all path */}

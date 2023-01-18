@@ -137,7 +137,8 @@ const Register = () => {
       return;
     }
     try {
-      const response = await api.post(
+      //const response =
+      await api.post(
         REGISTER_URL,
         JSON.stringify({ firstName, lastName, userName, pwd }),
         {

@@ -4,15 +4,26 @@ import api from "../../api/axios";
 import "../../App.css";
 import useAuth from "../../hooks/useAuth";
 
+let blogAuthor = null;
+
 export default function BlogPost() {
   const theBlogPost = useLoaderData();
+  if (null == blogAuthor && theBlogPost != null) {
+    // Record the userName when this page first loads.
+    // That way, if the post is deleted, and theBlogPost information
+    // is therefore lost, we can still redirect the user to the posts
+    // owned by the author of the original post.
+    blogAuthor = theBlogPost.author;
+    //    console.log("BlogPost> Caught author: " + blogAuthor);
+  }
+  // Check if the user is logged in
   const { auth } = useAuth();
 
   if (null == theBlogPost) {
     // No blog post found
     // Could be that the form and below action have already executed and
     // deleted the blog post.
-    return <Navigate to="/" replace />;
+    return <Navigate to={"/blogposts/" + blogAuthor} replace />;
   }
   return (
     <div className="blogpost-details">
@@ -21,7 +32,12 @@ export default function BlogPost() {
       <p>Date Modified: {theBlogPost.modifieddate}</p>
 
       <div className="details">
-        <p>Content: {theBlogPost.content}</p>
+        <p>
+          Content:{" "}
+          {!auth?.userName && theBlogPost.content.length > 100
+            ? theBlogPost.content.substring(0, 99) + "..."
+            : theBlogPost.content}
+        </p>
       </div>
       <div>
         {auth?.userName && auth.userName === theBlogPost.author ? (
@@ -40,13 +56,6 @@ export default function BlogPost() {
     </div>
   );
 }
-/*        
-          <>
-                    </>
-        ) : (
-          <></>
-        )}
-          */
 
 export const blogPostButtonHandler = async ({ request, params }) => {
   //  const data = await request.formData();
@@ -55,12 +64,21 @@ export const blogPostButtonHandler = async ({ request, params }) => {
   switch (request.method) {
     case "PUT": {
       //      console.log("blogPostButtonHandler> PUT id: " + id);
+      // TODO: Make this update in place
       return redirect("/updatepost/" + id);
     }
     case "DELETE": {
-      //console.log("blogPostButtonHandler> DELETE id: " + id);
+      //console.log("blogPostButtonHandler.delete> DELETE id: " + id);
       deleteBlogPost(id);
-      //  console.log("blogPostButtonHandler> Redirecting to blogposts");
+      if (blogAuthor != null) {
+        // Successfully deleted the blogPost and returned the owning userName
+        //  console.log("blogPostButtonHandler.delete> Redirecting to blogposts");
+        return redirect("/blogposts/" + blogAuthor);
+      }
+
+      // Either failed to delete blogPost or failed to find/return the owning
+      // userName
+      // Redirect to the root page
       return redirect("/");
     }
     default: {
@@ -72,13 +90,9 @@ export const blogPostButtonHandler = async ({ request, params }) => {
 };
 
 export const deleteBlogPost = async (id) => {
-  console.log("deleteBlogPost> Deleting blog id: " + id);
+  //  console.log("deleteBlogPost> Deleting blog id: " + id);
   try {
-    //const response =
     await api.delete("/blogposts/" + id);
-    //    console.log(
-    //      "deleteBlogPost> response.data: " + JSON.stringify(response.data)
-    //    );
   } catch (err) {
     if (err.response) {
       // Not in the 200 response range
@@ -98,6 +112,8 @@ export const blogPostLoader = async ({ params }) => {
   // Destructure id from the parameters
   const { id } = params;
 
+  //  console.log("blogPostLoader> id: " + id);
+
   // Once the code above is invoked, specifically to delete the blog post,
   // this function will be called again. The problem is that the params.id
   // field will point to an invalid id
@@ -106,9 +122,9 @@ export const blogPostLoader = async ({ params }) => {
 
   try {
     const response = await api.get("/blogposts/" + id);
-    console.log(
-      "blogPostsLoader> response.data: " + JSON.stringify(response.data)
-    );
+    //    console.log(
+    //      "blogPostsLoader> response.data: " + JSON.stringify(response.data)
+    //    );
     if (!response?.data) {
       // No blog entry found, return null data to communicate to the Component
       // that no blog entry exists

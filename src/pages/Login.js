@@ -62,7 +62,7 @@ const Login = () => {
 
       // Send the user to its original destination if routed here via protected route
       //      navigate(from, { replace: true });
-      navigate("/");
+      navigate("/blogposts/" + auth.userName);
     } catch (err) {
       if (!err?.response) {
         setErrMsg("No server response");
@@ -73,7 +73,7 @@ const Login = () => {
   };
 
   if (auth?.userName) {
-    return <Navigate replace to="/" />;
+    return <Navigate replace to={"/blogposts/" + auth.userName} />;
   }
 
   return (
