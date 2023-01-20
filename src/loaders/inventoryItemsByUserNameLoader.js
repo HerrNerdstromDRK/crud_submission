@@ -45,4 +45,5 @@ export const inventoryItemsByUserNameLoader = async ({ params }) => {
       console.log(`inventoryItemsByUserNameLoader> Error: ${err.message}`);
     }
   }
+  return [];
 };

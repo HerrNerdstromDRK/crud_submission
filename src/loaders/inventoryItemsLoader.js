@@ -39,4 +39,5 @@ export const inventoryItemsLoader = async () => {
       console.log(`inventoryItemsLoader> Error: ${err.message}`);
     }
   }
+  return [];
 };

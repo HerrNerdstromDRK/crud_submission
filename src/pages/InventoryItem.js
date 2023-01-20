@@ -148,8 +148,8 @@ export const inventoryItemButtonHandler = async ({ request, params }) => {
       deleteInventoryItem(id);
       if (itemAuthor != null) {
         // Successfully deleted the inventoryItem and returned the owning userName
-        //  console.log("inventoryItemButtonHandler.delete> Redirecting to blogposts");
-        return redirect("/blogposts/" + itemAuthor);
+        //  console.log("inventoryItemButtonHandler.delete> Redirecting to inventoryitems");
+        return redirect("/inventoryitems/" + itemAuthor);
       } else {
         console.log("inventoryItemButtonHandler> DELETE: No user found");
         return redirect("/");
@@ -161,7 +161,7 @@ export const inventoryItemButtonHandler = async ({ request, params }) => {
         "inventoryItemButtonHandler> No matching request.method: " +
           request.method
       );
-      return { message: "Invalid request method for blog post" };
+      return { message: "Invalid request method for inventory item" };
     }
   }
 };
@@ -217,7 +217,7 @@ const updateInventoryItem = async ({ request, params }) => {
 };
 
 const deleteInventoryItem = async (id) => {
-  //  console.log("deleteInventoryItem> Deleting blog id: " + id);
+  //  console.log("deleteInventoryItem> Deleting inventoryitem id: " + id);
   try {
     await api.delete("/inventoryitems/" + id);
   } catch (err) {
