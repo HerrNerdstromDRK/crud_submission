@@ -34,7 +34,11 @@ function App() {
   const { auth } = useAuth();
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route path="/" element={<RootLayout />}>
+      <Route
+        path="/"
+        element={<RootLayout />}
+        errorElement={<InventoryItemsError />}
+      >
         {/* Route to retrieve items from all users */}
         <Route
           index
