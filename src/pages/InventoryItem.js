@@ -1,9 +1,8 @@
 import {
   Form,
-  redirect,
   useLoaderData,
   useActionData,
-  Navigate,
+  useNavigate,
 } from "react-router-dom";
 
 import api from "../api/axios";
@@ -27,6 +26,8 @@ let deletedItem = false;
  * @returns
  */
 export default function InventoryItem() {
+  const navigate = useNavigate();
+
   // useLoaderData() will return the data retrieved from the below loader
   // function.
   const theInventoryItem = useLoaderData();
@@ -54,16 +55,14 @@ export default function InventoryItem() {
 
   // Has the item already been deleted?
   if (deletedItem) {
-    return <Navigate to={"/inventoryitems/" + itemAuthor} replace />;
+    // For some reason this variable persists.
+    console.log(
+      "InventoryItem> Found deletedItem true; itemAuthor: " + itemAuthor
+    );
+    deletedItem = false;
+    return navigate("/inventoryitems/" + itemAuthor);
   }
-  /* TODO: Soak; if this is never called then delete
-  if (null == theInventoryItem) {
-    // No inventoryItem found
-    // Could be that the form and below action have already executed and
-    // deleted the inventoryItem.
-    return <Navigate to={"/inventoryitems/" + itemAuthor} replace />;
-  }
-*/
+
   return (
     <div className="inventoryitem-details">
       {actionMessage ? actionMessage : ""}
