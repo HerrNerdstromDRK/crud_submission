@@ -63,6 +63,10 @@ export default function InventoryItem() {
     return navigate("/inventoryitems/" + itemAuthor);
   }
 
+  /*
+    Use case wording specifically says "so that I can see"
+    "all of its details" for both authenticated users anv visitors.
+    */
   return (
     <div className="inventoryitem-details">
       {actionMessage ? actionMessage : ""}
@@ -103,11 +107,7 @@ export default function InventoryItem() {
               rows="4"
               cols="50"
               name="description"
-              defaultValue={
-                !auth?.userName && theInventoryItem.description.length > 100
-                  ? theInventoryItem.description.substring(0, 99) + "..."
-                  : theInventoryItem.description
-              }
+              defaultValue={theInventoryItem.description}
               disabled={!editModeEnabled}
             />
           </label>
