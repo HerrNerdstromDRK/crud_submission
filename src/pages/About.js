@@ -1,6 +1,11 @@
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
 
+/**
+ * Not currently in use, but included in case I want to change
+ * my mind.
+ * @returns
+ */
 export default function About() {
   const [user, setUser] = useState("mario");
 

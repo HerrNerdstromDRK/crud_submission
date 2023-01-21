@@ -15,6 +15,10 @@ const USERNAME_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 const REGISTER_URL = "/inventoryitemusers/register";
 
+/**
+ * Component to register a new users. Note this is a pre-v6 method.
+ * @returns
+ */
 const Register = () => {
   // Place focus on first/last name input when page loads
   const firstNameRef = useRef();

@@ -30,6 +30,10 @@ import InventoryItemsError from "./pages/InventoryItemError";
 import RequireAuth from "./components/RequireAuth";
 import useAuth from "./hooks/useAuth";
 
+/**
+ * Build the Component structure via react router v6 structure.
+ * @returns
+ */
 function App() {
   const { auth } = useAuth();
   const router = createBrowserRouter(
@@ -39,7 +43,7 @@ function App() {
         element={<RootLayout />}
         errorElement={<InventoryItemsError />}
       >
-        {/* Route to retrieve items from all users */}
+        {/* Two routes to retrieve items from all users */}
         <Route
           index
           element={<InventoryItems />}
@@ -50,12 +54,16 @@ function App() {
           element={<InventoryItems />}
           loader={inventoryItemsLoader}
         />
+        {/* Retrieve all items for a single user. */}
+        {/* Can be invoked by any user. */}
         <Route
           path="/inventoryitems/:userName"
           element={<InventoryItems />}
           loader={inventoryItemsByUserNameLoader}
           errorElement={<InventoryItemsError />}
         />
+        {/* Retrieve a single inventory item. */}
+        {/* Also included update/delete buttons if the user is logged in. */}
         <Route
           path="/inventoryitem/:id"
           element={<InventoryItem />}
@@ -63,17 +71,20 @@ function App() {
           action={inventoryItemButtonHandler}
           errorElement={<InventoryItemsError />}
         />
+        {/* Register a new user. Not show if user is logged in. */}
         <Route path="register" element={<Register />} />
+        {/* Login a user. Not shown if a user is logged in. */}
         <Route path="login" element={<Login />} />
+        {/* Logout a user. Only shown if a user is logged in. */}
         <Route path="logout" element={<Logout />} />
-        {/* Protected routes */}
+        {/** Protected routes **/}
+        {/* Create an inventory item. */}
         <Route element={<RequireAuth />}>
           <Route
             path="createinventoryitem"
             element={<CreateInventoryItem />}
             action={createInventoryItemAction({ auth })}
           />
-          {/* Protected route for items for this user only */}
         </Route>
         {/* Catch all */}
         <Route

@@ -10,12 +10,15 @@ export default function RootLayout() {
       <header>
         <nav>
           <h1>Karrels CRUD</h1>
-          <NavLink to="/">Home</NavLink>
+          <NavLink to="/">Inventory</NavLink>
           {auth?.userName ? (
             <>
               {" "}
-              <NavLink to="logout">Logout</NavLink>
+              <NavLink to={"inventoryitems/" + auth.userName}>
+                My Inventory Items{" "}
+              </NavLink>
               <NavLink to="createinventoryitem">Create Item</NavLink>
+              <NavLink to="logout">Logout</NavLink>
             </>
           ) : (
             <>

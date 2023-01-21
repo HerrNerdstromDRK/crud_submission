@@ -12,13 +12,27 @@ import useAuth from "../hooks/useAuth";
 
 // itemAuthor is used to track the owner between loader/render/action
 let itemAuthor = null;
+
+// Track the edit state: if true, the user is currently editing the item.
+// False otherwise.
 let editModeEnabled = false;
 
+// If the user deletes this item, set this flag to indicate that
+// the item has been deleted.
+let deletedItem = false;
+
+/**
+ * Component to show a single inventory item. If the user is authenticate,
+ * also allow to update and delete that item.
+ * @returns
+ */
 export default function InventoryItem() {
   // useLoaderData() will return the data retrieved from the below loader
   // function.
   const theInventoryItem = useLoaderData();
-  //  console.log("InventoryItem> theInventoryItem: " + JSON.stringify(theInventoryItem));
+  //  console.log(
+  //    "InventoryItem> theInventoryItem: " + JSON.stringify(theInventoryItem)
+  //  );
 
   // Since this is a form that can potentially have many cycles of
   // loader/render/action, catch any messages from the action function here
@@ -31,21 +45,25 @@ export default function InventoryItem() {
     // Record the userName when this page first loads.
     // That way, if the item is deleted, and theInventoryItem information
     // is therefore lost, we can still redirect the user to the items
-    // owned by the owner of the original post.
+    // owned by the owner of the original item.
     itemAuthor = theInventoryItem.owner;
     //    console.log("InventoryItem> Caught owner: " + itemAuthor);
   }
   // Check if the user is logged in
   const { auth } = useAuth();
-  //                 !/[0-9\x7F\x08\u2190]/.test(e.key) && e.preventDefault()
 
+  // Has the item already been deleted?
+  if (deletedItem) {
+    return <Navigate to={"/inventoryitems/" + itemAuthor} replace />;
+  }
+  /* TODO: Soak; if this is never called then delete
   if (null == theInventoryItem) {
     // No inventoryItem found
     // Could be that the form and below action have already executed and
     // deleted the inventoryItem.
     return <Navigate to={"/inventoryitems/" + itemAuthor} replace />;
   }
-
+*/
   return (
     <div className="inventoryitem-details">
       {actionMessage ? actionMessage : ""}
@@ -125,7 +143,7 @@ export const inventoryItemButtonHandler = async ({ request, params }) => {
 
   switch (request.method) {
     case "POST": {
-      // POST means update post (save to the backend)
+      // POST means update item (save to the backend)
       //      console.log("inventoryItemButtonHandler> Caught POST; saving to backend");
       // Disable edit mode
       editModeEnabled = false;
@@ -142,18 +160,9 @@ export const inventoryItemButtonHandler = async ({ request, params }) => {
       return { message: "Edit mode enabled" };
     }
     case "DELETE": {
-      // DELETE means delete the post
-      //  form validation of an authenticated user.
+      // DELETE means delete the inventory item
       //console.log("inventoryItemButtonHandler.delete> DELETE id: " + id);
-      deleteInventoryItem(id);
-      if (itemAuthor != null) {
-        // Successfully deleted the inventoryItem and returned the owning userName
-        //  console.log("inventoryItemButtonHandler.delete> Redirecting to inventoryitems");
-        return redirect("/inventoryitems/" + itemAuthor);
-      } else {
-        console.log("inventoryItemButtonHandler> DELETE: No user found");
-        return redirect("/");
-      }
+      return deleteInventoryItem(id);
     }
     default: {
       // Either failed to delete inventoryItem or failed to find/return the owning
@@ -197,7 +206,7 @@ const updateInventoryItem = async ({ request, params }) => {
       description: updatedDescription,
       quantity: updatedQuantity,
     };
-    //    console.log("updateInventoryItem> updatedItem: " + JSON.stringify(updatedPost));
+    //    console.log("updateInventoryItem> updatedItem: " + JSON.stringify(updatedItem));
 
     // Next, submit the updated item
     await api.patch(`/inventoryitems/${id}`, updatedItem);
@@ -220,33 +229,44 @@ const deleteInventoryItem = async (id) => {
   //  console.log("deleteInventoryItem> Deleting inventoryitem id: " + id);
   try {
     await api.delete("/inventoryitems/" + id);
+    // Record that we have deleted the item so the data loader doesn't
+    // get confused when the page redraws.
+    deletedItem = true;
   } catch (err) {
-    if (err.response) {
-      // Not in the 200 response range
+    if (500 === err.response) {
+      // delete() only returns 200 or 500 status
+      console.log(`deleteInventoryItem> Error: ${err.message}`);
+      return { message: "Error: " + err.message };
+      /*      // Not in the 200 response range
       console.log(err.response.data);
       console.log(err.response.status);
       console.log(err.response.headers);
+      return { message: "Error: " + err.response };
     } else {
-      // No response or non-200 error
-      console.log(`deleteInventoryItem> Error: ${err.message}`);
+*/
     }
   }
   // Navigation/redirection is handled in the component or inventoryItemButtonHandler
+  return { message: "Inventory item successfully deleted!" };
 };
 
 // Loader function
 export const inventoryItemLoader = async ({ params }) => {
+  if (deletedItem) {
+    // Item already deleted.
+    // Return null to indicate it has been deleted.
+    console.log("inventoryItemLoader> Returning null due to deleted item");
+    const response = { data: null };
+    return response;
+  }
   // Destructure id from the parameters
   const { id } = params;
-
-  //  console.log("inventoryItemLoader> id: " + id);
 
   // Once the code above is invoked, specifically to delete the inventoryItem,
   // this function will be called again. The problem is that the params.id
   // field will point to an invalid id.
   // Need to send a signal back to the component that the item is already
   // deleted and it should Navigate the user to a different page.
-
   try {
     const response = await api.get("/inventoryitems/" + id);
     //    console.log(

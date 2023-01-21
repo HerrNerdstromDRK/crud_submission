@@ -1,5 +1,5 @@
 import React from "react";
 
 export default function CreateItemLayout() {
-  return <div>CreatePostLayout</div>;
+  return <div>CreateInventoryItemLayout</div>;
 }

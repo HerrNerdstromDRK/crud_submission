@@ -1,7 +1,6 @@
 import api from "../api/axios";
 
-// TODO: dotenv
-const API_BASE_URL = "/inventoryitems/byusername/"; // :userName
+const API_BASE_URL = "/inventoryitems/byusername/";
 
 /**
  * Load all inventory items for a given user.
@@ -10,14 +9,14 @@ const API_BASE_URL = "/inventoryitems/byusername/"; // :userName
  */
 export const inventoryItemsByUserNameLoader = async ({ params }) => {
   const userName = params.userName;
-  console.log(
-    "inventoryItemsByUserNameLoader> Loading inventory items for userName: " +
-      userName
-  );
+  //  console.log(
+  //    "inventoryItemsByUserNameLoader> Loading inventory items for userName: " +
+  //      userName
+  //  );
 
   try {
     const fullURL = API_BASE_URL + userName;
-    console.log("inventoryItemsByUserNameLoader> fullURL: " + fullURL);
+    //    console.log("inventoryItemsByUserNameLoader> fullURL: " + fullURL);
     const response = await api.get(fullURL, {
       // query URL without using browser cache
       // For some reason, the app is not retrieving the full list of items

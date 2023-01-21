@@ -1,3 +1,7 @@
+/**
+ * Not currently used, but included in case I change my mind.
+ * @returns
+ */
 export default function Home() {
   return (
     <div className="home">

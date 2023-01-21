@@ -6,6 +6,10 @@ import useAuth from "../hooks/useAuth";
 
 const LOGIN_URL = "/inventoryitemusers/authenticate";
 
+/**
+ * Component to handle a user login. Note this is a pre-v6 method.
+ * @returns
+ */
 const Login = () => {
   // Capture the stateful auth context
   const { auth, setAuth } = useAuth();

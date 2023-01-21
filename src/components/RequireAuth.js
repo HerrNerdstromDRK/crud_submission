@@ -1,6 +1,10 @@
 import { useLocation, Navigate, Outlet } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 
+/**
+ * Used to provide protected routes.
+ * @returns
+ */
 const RequireAuth = () => {
   const { auth } = useAuth();
   const location = useLocation();

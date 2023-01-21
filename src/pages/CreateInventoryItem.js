@@ -3,6 +3,10 @@ import React from "react";
 import { Form, useActionData, redirect } from "react-router-dom";
 import api from "../api/axios";
 
+/**
+ * Component to create a single inventory item.
+ * @returns
+ */
 export default function CreateInventoryItem() {
   // The useActionData() hook allows us access to the return data
   // from the createInventoryItemAction() below.
@@ -17,7 +21,6 @@ export default function CreateInventoryItem() {
           <input type="message" name="itemname" required />
         </label>
         <label>
-          {/* TODO: number validation */}
           <span>Quantity:</span>
           <input
             type="number"
@@ -69,7 +72,7 @@ export const createInventoryItemAction =
         quantity: data.get("quantity"),
         description: data.get("description"),
       };
-      //    console.log("createInventoryItemAction> newInventoryItem: " + JSON.stringify(newPost));
+      //    console.log("createInventoryItemAction> newInventoryItem: " + JSON.stringify(newInventoryItem));
 
       // Next, submit the new post
       await api.post("/inventoryitems", newInventoryItem);
