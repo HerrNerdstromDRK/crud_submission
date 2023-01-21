@@ -9,9 +9,6 @@ import api from "../api/axios";
 import "../App.css";
 import useAuth from "../hooks/useAuth";
 
-// itemAuthor is used to track the owner between loader/render/action
-let itemAuthor = null;
-
 // Track the edit state: if true, the user is currently editing the item.
 // False otherwise.
 let editModeEnabled = false;
@@ -28,6 +25,9 @@ let deletedItem = false;
 export default function InventoryItem() {
   const navigate = useNavigate();
 
+  // Check if the user is logged in
+  const { auth } = useAuth();
+
   // useLoaderData() will return the data retrieved from the below loader
   // function.
   const theInventoryItem = useLoaderData();
@@ -42,25 +42,16 @@ export default function InventoryItem() {
     ? actionMessageObject.message
     : "";
 
-  if (null == itemAuthor && theInventoryItem != null) {
-    // Record the userName when this page first loads.
-    // That way, if the item is deleted, and theInventoryItem information
-    // is therefore lost, we can still redirect the user to the items
-    // owned by the owner of the original item.
-    itemAuthor = theInventoryItem.owner;
-    //    console.log("InventoryItem> Caught owner: " + itemAuthor);
-  }
-  // Check if the user is logged in
-  const { auth } = useAuth();
-
   // Has the item already been deleted?
   if (deletedItem) {
-    // For some reason this variable persists.
+    const loggedInUserName = auth.userName;
     console.log(
-      "InventoryItem> Found deletedItem true; itemAuthor: " + itemAuthor
+      "InventoryItem> Found deletedItem true; loggedInUserName: " +
+        loggedInUserName
     );
+    // deletedItem is at file scope and persists across renders
     deletedItem = false;
-    return navigate("/inventoryitems/" + itemAuthor);
+    return navigate("/inventoryitems/" + loggedInUserName);
   }
 
   /*
